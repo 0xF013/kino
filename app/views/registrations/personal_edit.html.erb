@@ -1,0 +1,40 @@
+<%= layout_header "Личные данные" %>
+
+<%= nested_form_for(@personal_info, :url => '/registrations/personal_update', :method => :post, :html => {:class => "form-stacked"}) do |f| %>
+
+  <%= render 'shared/error_messages', :target => @personal_info %>
+
+  <p><%= f.label :first_name %>
+  <%= f.text_field :first_name %></p>
+
+  <p><%= f.label :last_name %>
+  <%= f.text_field :last_name %></p>
+  
+  <p><%= f.label :dob %>
+  <%= f.date_select :dob, :start_year => 1900 %></p>
+  
+  <p><%= f.label :gender %>
+  <%= f.radio_button :gender, true %>  <%= f.label :gender, t("gender_male"), :value => true, :style => "display:inline" %>
+  <%= f.radio_button :gender, false %>  <%= f.label :gender, t("gender_female"), :value => false, :style => "display:inline" %></p> 
+  
+  <p><%= f.label :citizenships %>
+  <%= f.collection_select :citizenship_ids, Citizenship.all, :id, :name, {  }, {:selected => @personal_info.citizenships.collect {|item| item.id}, :multiple => true, :size => 5} %></p> 
+  <p>
+    <%= f.label :location_id %>  
+    <%= f.select :location_id, Location.all.collect {|item| [item.name, item.id]} %> 
+  </p> 
+  
+  <%= f.fields_for :language_personal_infos do |l| %>
+    <p><%= l.label :language_id %> 
+    <%= l.select :language_id, Language.all.collect {|item| [item.name, item.id]} %> 
+    <%= l.label :level_id %> 
+    <%= l.select :level_id, LanguageLevel.all.collect {|item| [item.name, item.id]} %></p>
+    <%= l.link_to_remove "Удалить язык" %>
+  <% end %>
+  <%= f.link_to_add "Добавить язык", :language_personal_infos %>
+  
+
+
+  <p><%= f.submit "Сохранить", :class => "btn primary" %></p>
+<% end %>
+

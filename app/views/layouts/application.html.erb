@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kino</title>
+<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->  
+  <%= stylesheet_link_tag "application" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tag %>
+    <style type="text/css">
+      /* Override some defaults */
+      html, body {
+        background-color: #eee;
+      }
+      body {
+        padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+      }
+      .container > footer p {
+        text-align: center; /* center align it with the container */
+      }
+      .container {
+        width: 820px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+      }
+
+      /* The white background content wrapper */
+      .content {
+        background-color: #fff;
+        padding: 20px;
+        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+        -webkit-border-radius: 0 0 6px 6px;
+           -moz-border-radius: 0 0 6px 6px;
+                border-radius: 0 0 6px 6px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+                box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      }
+
+      /* Page header tweaks */
+      .page-header {
+        background-color: #f5f5f5;
+        padding: 20px 20px 10px;
+        margin: -20px -20px 20px;
+      }
+
+      /* Styles you shouldn't keep as they are for displaying this base example only */
+      .content .span10,
+      .content .span4 {
+        min-height: 500px;
+      }
+      /* Give a quick and non-cross-browser friendly divider */
+      .content .span4 {
+        margin-left: 0;
+        padding-left: 19px;
+        border-left: 1px solid #eee;
+      }
+
+      .topbar .btn {
+        border: 0;
+      }
+
+    </style>
+</head>
+  <body>
+
+    <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">Кино</a>
+          <ul class="nav">
+            <li class="active"><%= link_to "Home", root_path %></li>
+            <li><a href="#about">About</a></li>
+            <li><%= link_to "Contact", "/home/contact" %></li>
+            <li><%= link_to "Регистрация", "/registrations" %></li>
+          </ul>
+          
+          <% if user_signed_in? %>
+            <ul class="nav" style="float:right">
+              <li><%= link_to "Личные данные", "/registrations/personal_edit" %></li>
+              <li><%= link_to "Выйти", destroy_user_session_path , :method => :delete%></li>
+            </ul>
+          <% else %>
+            <%= form_for(:user, :as => :user, :url => session_path(:user), :html => {:class => "pull-right"}) do |f| %>
+            <%= f.email_field :email, :class => "input-small", :placeholder => "Email" %>
+            <%= f.password_field :password, :class => "input-small", :placeholder => "Пароль" %>
+            <%= f.submit "Войти", :class => "btn primary" %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        <div class="page-header">
+          <h1><%= yield(:header) %> <small>Supporting text or tagline</small></h1>
+        </div>
+        <%= render :partial => "shared/flash_messages", :locals => {:flash => flash} %>
+
+        <div class="row">
+          <div class="span10">
+            <%= yield %>
+          </div>
+          <div class="span4">
+            <h3>Secondary content</h3>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <p>&copy; Company 2011</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+
+</html>
+
+

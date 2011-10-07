@@ -1,0 +1,12 @@
+<% if target.errors.any? %>  
+  <div class="alert-message block-message error fade in" data-alert="alert">
+    <a class="close" href="#">×</a>
+    <p><strong>При сохранении записи выявлены следующие ошибки:</strong>
+      <ul>  
+      <% target.errors.full_messages.each do |msg| %>  
+        <li><%= msg %></li>  
+      <% end %>  
+      </ul>  
+    </p>
+  </div>
+<% end %>  
